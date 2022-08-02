@@ -33,9 +33,8 @@ io.on('connection', (socket) => {
   sockets.set(socket.id, socket);
 
   socket.on('start', () => {
-    console.log('start timer');
-
     if (!timer) {
+      console.log('start timer');
       timer = setInterval(() => {
         progress += 1;
         io.emit('tick', progress);
@@ -45,13 +44,15 @@ io.on('connection', (socket) => {
 
   socket.on('stop', () => {
     if (timer) {
+      console.log('stop timer');
       clearInterval(timer);
     }
   });
 
   socket.on('reset', () => {
-    socket.broadcast.emit('reset');
     if (timer) {
+      socket.broadcast.emit('reset');
+      console.log('reset timer');
       clearInterval(timer);
       progress = 0;
     }
