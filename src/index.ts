@@ -3,7 +3,7 @@ dotenv.config();
 
 import express from 'express';
 import http from 'http';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { engine } from 'express-handlebars';
 
 const app = express();
@@ -26,29 +26,40 @@ app.get('/', (req, res) => {
 let timer: NodeJS.Timer;
 let progress = 0;
 
+const sockets = new Map<string, Socket>();
+
 io.on('connection', (socket) => {
   console.log(`socket id: ${socket.id} connected`);
+  sockets.set(socket.id, socket);
 
   socket.on('start', () => {
     console.log('start timer');
-    timer = setInterval(() => {
-      progress += 1;
-      io.emit('tick', progress);
-    }, 1000);
+
+    if (!timer) {
+      timer = setInterval(() => {
+        progress += 1;
+        io.emit('tick', progress);
+      }, 1000);
+    }
   });
 
   socket.on('stop', () => {
-    clearInterval(timer);
+    if (timer) {
+      clearInterval(timer);
+    }
   });
 
   socket.on('reset', () => {
     socket.broadcast.emit('reset');
-    clearInterval(timer);
-    progress = 0;
+    if (timer) {
+      clearInterval(timer);
+      progress = 0;
+    }
   });
 
   socket.on('disconnect', () => {
     console.log(`socket id: ${socket.id} disconnected`);
+    sockets.delete(socket.id);
   });
 });
 
