@@ -53,4 +53,7 @@ io.on('connection', (socket) => {
 
 server.listen(process.env.PORT, () => {
   console.log(`🚀 Listening on port ${process.env.PORT}`);
+  console.log(`   PORT => ${process.env.PORT}`);
+  console.log(`   RAILWAY_STATIC_URL => ${process.env.RAILWAY_STATIC_URL}`);
+  console.log(`   RAILWAY_ENVIRONMENT => ${process.env.RAILWAY_ENVIRONMENT}`);
 });
