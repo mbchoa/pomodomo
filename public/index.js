@@ -1,7 +1,9 @@
 (async function (global) {
   const isProduction = global.ENV === 'production';
   const protocol = isProduction ? 'https://' : 'http://';
-  const socket = global.io(`${protocol}${global.STATIC_URL}:${global.PORT}`);
+  const socket = global.io(`${protocol}${global.STATIC_URL}:${global.PORT}`, {
+    transports: ['websocket']
+  });
 
   const startBtn = global.document.querySelector('.start');
   const stopBtn = global.document.querySelector('.stop');
