@@ -18,7 +18,6 @@ app.set('views', './views');
 app.use(express.static('public'));
 app.get('/', (req, res) => {
   res.render('index', {
-    port: process.env.PORT,
     url: process.env.RAILWAY_STATIC_URL,
     env: process.env.RAILWAY_ENVIRONMENT
   });
