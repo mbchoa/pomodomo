@@ -1,0 +1,38 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body, main {
+  height: 100%;
+  margin: 0;
+}
+
+.content {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  border: 1px solid black;
+  border-radius: 4px;
+  padding: 16px;
+}
+
+.time {
+  font-size: 3rem;
+  text-align: center;
+  width: 100%;
+}
+
+.actions {
+  display: grid;
+  gap: 4px;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 16px;
+}
+
+.actions > button {
+  padding: 8px;
+  text-transform: uppercase;
+}
