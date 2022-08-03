@@ -53,13 +53,11 @@ io.on('connection', (socket) => {
   });
 
   socket.on('reset', () => {
-    if (isRunning) {
-      socket.broadcast.emit('reset');
-      console.log('reset timer');
-      clearInterval(timer);
-      progress = 0;
-      isRunning = false;
-    }
+    console.log('reset timer');
+    socket.broadcast.emit('reset');
+    clearInterval(timer);
+    progress = 0;
+    isRunning = false;
   });
 
   socket.on('disconnect', () => {
