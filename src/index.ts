@@ -23,8 +23,9 @@ app.get('/', (req, res) => {
   });
 });
 
-let timer: NodeJS.Timer;
+let timer: NodeJS.Timer | undefined;
 let progress = 0;
+let isRunning = false;
 
 const sockets = new Map<string, Socket>();
 
@@ -33,8 +34,9 @@ io.on('connection', (socket) => {
   sockets.set(socket.id, socket);
 
   socket.on('start', () => {
-    if (!timer) {
+    if (!isRunning) {
       console.log('start timer');
+      isRunning = true;
       timer = setInterval(() => {
         progress += 1;
         io.emit('tick', progress);
@@ -43,18 +45,20 @@ io.on('connection', (socket) => {
   });
 
   socket.on('stop', () => {
-    if (timer) {
+    if (isRunning) {
       console.log('stop timer');
       clearInterval(timer);
+      isRunning = false;
     }
   });
 
   socket.on('reset', () => {
-    if (timer) {
+    if (isRunning) {
       socket.broadcast.emit('reset');
       console.log('reset timer');
       clearInterval(timer);
       progress = 0;
+      isRunning = false;
     }
   });
 
