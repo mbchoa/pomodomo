@@ -9,21 +9,54 @@
   const stopBtn = global.document.querySelector('.stop');
   const resetBtn = global.document.querySelector('.reset');
   const time = global.document.querySelector('.time__value');
+  const fifteenMinuteBtn = global.document.querySelector('.fifteen');
+  const twentyFiveMinuteBtn = global.document.querySelector('.twentyfive');
+  const fiftyMinuteBtn = global.document.querySelector('.fifty');
 
-  let current = 0;
+  let current = global.SESSION_DURATION * 60;
+  let isRunning = global.RUNNING;
 
   startBtn.addEventListener('click', () => {
     socket.emit('start');
+    isRunning = true;
   });
 
   stopBtn.addEventListener('click', () => {
     socket.emit('stop');
+    isRunning = false;
   });
 
   resetBtn.addEventListener('click', () => {
     socket.emit('reset');
-    current = 0;
-    time.innerText = formatTime();
+    isRunning = false;
+  });
+
+  fifteenMinuteBtn.addEventListener('click', () => {
+    if (!isRunning) {
+      socket.emit('set session duration', 15);
+      current = 15 * 60;
+      time.innerText = formatTime();
+    }
+  });
+
+  twentyFiveMinuteBtn.addEventListener('click', () => {
+    if (!isRunning) {
+      socket.emit('set session duration', 25);
+      current = 25 * 60;
+      time.innerText = formatTime();
+    }
+  });
+
+  fiftyMinuteBtn.addEventListener('click', () => {
+    if (!isRunning) {
+      socket.emit('set session duration', 50);
+      current = 50 * 60;
+      time.innerText = formatTime();
+    }
+  });
+
+  socket.on('start', () => {
+    isRunning = true;
   });
 
   socket.on('tick', (progress) => {
@@ -31,15 +64,18 @@
     time.innerText = formatTime();
   });
 
-  socket.on('reset', () => {
-    current = 0;
+  socket.on('stop', () => {
+    isRunning = false;
+  });
+
+  socket.on('set session duration', (duration) => {
+    current = duration;
     time.innerText = formatTime();
   });
 
   function formatTime() {
-    const hours = `${~~(current / 3600)}`.padStart(2, '0');
     const minutes = `${~~((current % 3600) / 60)}`.padStart(2, '0');
     const seconds = `${~~(current % 60)}`.padStart(2, '0');
-    return `${hours}:${minutes}:${seconds}`;
+    return `${minutes}:${seconds}`;
   }
 })(window);

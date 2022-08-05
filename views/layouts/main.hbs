@@ -12,6 +12,9 @@
     <script>
       window.STATIC_URL = '{{url}}';
       window.ENV = '{{env}}';
+      window.SESSION_DURATION = {{sessionDuration}};
+      window.NUMBER_OF_SESSIONS = {{numberOfSessions}};
+      window.RUNNING = {{isRunning}}
     </script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="index.js"></script>
