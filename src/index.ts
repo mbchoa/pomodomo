@@ -23,11 +23,11 @@ interface Settings {
 }
 
 const settings: Settings = {
-  sessionDuration: 50,
+  sessionDuration: 25,
   numberOfSessions: 3
 };
 let timer: NodeJS.Timer | undefined;
-let progress = 5;
+let progress = settings.sessionDuration * 60;
 let isRunning = false;
 let isBreakActive = false;
 
